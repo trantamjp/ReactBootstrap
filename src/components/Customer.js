@@ -145,7 +145,6 @@ function Paging({ pageIndex, pageCount, gotoPage, setPageSize }) {
   );
 }
 
-
 // Let's add a fetchData method to our Table component that will be used to fetch
 // new data when pagination state changes
 // We can also add a loading state to let our table know it's loading new data
@@ -234,7 +233,7 @@ function Table({
   return (
     <Container fluid>
       <h2>Customer List</h2>
-      <BTable {...getTableProps()}>
+      <BTable {...getTableProps()} striped bordered hover>
         <thead>
           {headerGroups.map(headerGroup => (
             <tr {...headerGroup.getHeaderGroupProps()}>
@@ -279,15 +278,12 @@ function Table({
                   Failed to fetch data.
                 </td>
               ) :
-                loading ? (
-                  // Use our custom loading state to show a loading indicator
-                  <td colSpan="10000">Loading...</td>
-                ) : (
-                    <td colSpan="10000">
-                      Showing {pageIndex * pageSize + 1} to {pageIndex * pageSize + apiData.data.length} of {apiData.recordsFiltered} entries
-                      {apiData.recordsFiltered < apiData.recordsTotal ? "(filtered from " + apiData.recordsTotal + " total entries)" : ""}
-                    </td>
-                  )
+                (
+                  <td colSpan="10000">
+                    Showing {pageIndex * pageSize + 1} to {pageIndex * pageSize + apiData.data.length} of {apiData.recordsFiltered} entries
+                    {apiData.recordsFiltered < apiData.recordsTotal ? "(filtered from " + apiData.recordsTotal + " total entries)" : ""}
+                  </td>
+                )
             }
           </tr>
         </tbody>
@@ -404,14 +400,13 @@ function CustomerTable() {
         }
       })
       .catch(function (error) {
-        console.log("Fetching data", error);
         if (typeof (error) != "string") {
           error = error.toString()
         }
         setApiData({ error: error });
       });
-  }, []);
 
+  }, []);
 
   return (
     <Table
